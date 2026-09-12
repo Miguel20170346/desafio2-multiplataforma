@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../src/context/AuthContext';
 import { colors } from '../src/styles/theme';
 import AlertBanner from '../src/components/AlertBanner';
 
 export default function LoginScreen() {
   const { login, availableUsers } = useAuth();
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
@@ -15,7 +17,11 @@ export default function LoginScreen() {
   const handleLogin = () => {
     setError('');
     const result = login(username, password);
-    if (!result.success) setError(result.message);
+    if (result.success) {
+      router.replace('/(tabs)/menu');
+    } else {
+      setError(result.message);
+    }
   };
 
   return (

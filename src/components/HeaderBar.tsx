@@ -1,16 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { colors } from '../styles/theme';
 import { useAuth } from '../context/AuthContext';
 
 export default function HeaderBar({ title, subtitle }: { title: string; subtitle?: string }) {
   const { currentUser, logout } = useAuth();
+  const router = useRouter();
 
   const handleLogout = () => {
     Alert.alert('Cerrar Sesión', '¿Desea salir del sistema?', [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Cerrar Sesión', style: 'destructive', onPress: logout },
+      {
+        text: 'Cerrar Sesión',
+        style: 'destructive',
+        onPress: () => {
+          logout();
+          router.replace('/');
+        },
+      },
     ]);
   };
 
